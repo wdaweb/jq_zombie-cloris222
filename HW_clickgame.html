@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: '微軟正黑體';
+      list-style: none;
+    }
+    body,html{
+      width: 100%;
+      height: 100%;
+    }
+    body{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .container{
+      width: 1000px;
+      height: 600px;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: space-evenly;
+      align-items:center;
+      background-color: #333;
+      padding-top: 10px;
+      padding-bottom: 20px;
+    }
+    .top{
+      width: 900px;
+      height: 50px;
+      margin: auto;
+    }
+    .top table{
+      width: 100%;
+      height: 100%;
+      background-color: lightcoral;
+      border: 3px solid #333;
+      border-collapse: collapse;
+      border-spacing: 0;
+      text-align: center;
+      color: #eee;
+      font-size: 22px;
+      
+    }
+    .top table td:nth-child(1),.top table td:nth-child(3),.top table td:nth-child(5),.top table td:nth-child(7){
+      width: 150px;
+      font-weight: bold;
+      color: rgba(50, 24, 24, 0.723);
+    }
+    .top table td:nth-child(2),.top table td:nth-child(4),.top table td:nth-child(6),.top table td:nth-child(8){
+      width: 100px;
+      text-align: left;
+    }
+    .game{
+      width: 900px;
+      height: 450px;
+      overflow: hidden;
+      position: relative;
+     margin: 10px 50px  ;
+     /* cursor:url(./—Pngtree—charms\ and\ charms\ for\ blessing_5909854.png)50 50,auto */
+     background-color: lightgray;
+     border: 3px solid #333;
+    }
+
+    .game .game-box{
+      width: 100%;
+      height: 340px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .game table{
+      width: 100%;
+      height: 110px;
+      border-collapse: collapse;
+      border-spacing: 0;
+      position: absolute;
+      text-align: center;
+      left: 0;
+      bottom: 0;
+    }
+
+    .game table td:nth-child(1){
+      background: url(./符咒.png),linear-gradient(to right , darkgray,darkgray);
+      background-repeat: no-repeat,no-repeat;
+      background-size: contain,cover;
+      background-position: center,center;
+    }
+
+    .game table td:nth-child(1):hover{
+      background: url(./符咒.png),linear-gradient(to right , #333,#333);
+      background-repeat: no-repeat,no-repeat;
+      background-size: contain,cover;
+      background-position: center,center;
+      transform: scale(1.1);
+    }
+
+    .game table td:nth-child(2){
+      background: url(./pngtree-cross-png-image_4021536.png),linear-gradient(to right , darkgray,darkgray);
+      background-repeat: no-repeat,no-repeat;
+      background-size: contain,cover;
+      background-position: center,center;
+    }
+
+    .game table td:nth-child(2):hover{
+      background: url(./白色十字架.png),linear-gradient(to right , #333,#333);
+      background-repeat: no-repeat,no-repeat;
+      background-size: contain,cover;
+      background-position: center,center;
+      transform: scale(1.1);
+    }
+
+    .start{
+      width: 150px;
+      height: 50px;
+      border: 3px solid #333;
+      border-radius: 15px;
+      background-color: lightcoral;
+      text-align: center;
+      font-size: 28px;
+      color: #eee;
+      line-height: 44px;
+    }
+
+    .monster{
+      height: 150px;
+      position: absolute;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    /* .cursorfu{
+      cursor: url(./符咒指標.png)50 50 ,auto;
+    }
+
+    .cursorcross{
+      cursor: url(./十字架指標.png)50 50,auto;
+    } */
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top">
+      <table>
+        <tr>
+          <td>消滅數量:</td>
+          <td><span class="text-score">0</span>隻</td>
+          <td>剩餘:</td>
+          <td><span class="text-time">0</span>秒</td>
+          <td>最高分玩家:</td>
+          <td><span class="text-highscorename"></span></td>
+          <td>最高消滅數:</td>
+          <td><span class="text-highscore">0</span>隻</td>
+        </tr>
+      </table>
+    </div>
+  <div class="game">
+    <div class="game-box"></div>
+    <table>
+      <tr>
+        <td class="s1"></td>
+        <td class="s2"></td>
+      </tr>
+    </table>
+  </div>
+<input type="button" value="開始遊戲" class="start">
+  </div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js' integrity='sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    let score = 0
+    let countdown = 0
+    let timer =0
+
+    const highscore = localStorage.clickgame ? JSON.parse(localStorage.clickgame) : { name: '', score: 0 }
+    $('.text-highscorename').text(highscore.name)
+    $('.text-highscore').text(highscore.score)
+
+    function move(monster){
+      const top = Math.round(Math.random() * 100) + '%'
+      const left = Math.round(Math.random() * 100) + '%'
+      monster.stop().animate({ top, left }, 2000, function () {
+        if ($('.start').attr('disabled') === 'disabled') {
+          move(monster)
+        }
+      })
+    }
+
+    $('.start').click(function(){
+      $(this).attr('disabled',true)
+      score = 0
+      $('.text-score').text(score)
+      countdown = 5
+      $('.text-time').text(countdown)
+
+      timer = setInterval(() => {
+        countdown--
+        console.log(countdown)
+        
+        $('.text-time').text(countdown)
+
+        const random = Math.ceil(Math.random()*20)%2
+        // 出殭屍
+        if(random === 0 && $('.monster').length<7){
+        const top = Math.round(Math.random() * 100) + '%'
+          const left = Math.round(Math.random() * 100) + '%'
+          const monster = $(`<img src = "./—Pngtree—cartoon anime little zombie free_4681564.png" class="monster" style="top:${top};left:${left}">`)
+          $('.game-box').append(monster)
+          move(monster)
+        }
+        // 出幽靈
+        if(random !== 0 && $('.monster').length<7){
+          const top = Math.round(Math.random() * 100) + '%'
+          const left = Math.round(Math.random() * 100) + '%'
+          const monster = $(`<img src = "./ghost.png" class="monster" style="top:${top};left:${left}">`)
+          $('.game-box').append(monster)
+          move(monster)
+        }
+
+        if(countdown ===0){
+          clearInterval(timer)
+          $('.game-box img').remove()
+          $('.start').attr('disabled',false)
+
+          if (score > highscore.score) {
+            Swal.fire({
+              icon: 'info',
+              title: '時間到',
+              text: `最高分，你得到 ${score} 分`,
+              inputPlaceholder: '請輸入名字',
+              input: 'text',
+              inputAttributes: {
+                required: true
+              },
+              validationMessage: '名稱必填',
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            }).then(result => {
+              highscore.score = score
+              highscore.name = result.value
+              $('.text-highscorename').text(highscore.name)
+              $('.text-highscore').text(highscore.score)
+
+              localStorage.clickgame = JSON.stringify(highscore)
+            })
+          } else {
+            Swal.fire({
+              icon: 'info',
+              title: '時間到',
+              text: `你得到 ${score} 分`
+            })
+          }
+        }
+
+        
+      }, 1000);
+    })
+$('.game').on('click','.s1',function(){
+  
+$('.game-box').css('cursor','url(./符咒指標.png)50 50 ,auto')
+})
+
+$('.game').on('click','.s2',function(){
+  
+$('.game-box').css('cursor','url(./十字架指標.png)50 50,auto')
+})
+
+
+
+    $('.game').on('click','.monster',function(){
+$(this).stop().fadeTo(2000,0,function(){
+  console.log('被消滅了')
+})
+score++
+$('.text-score').text(score)
+    })
+  </script>
+</body>
+</html>
